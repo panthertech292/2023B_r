@@ -6,8 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -22,14 +25,19 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final DriveSubsystem s_DriverSubsystem = new DriveSubsystem();
+
+  private final Command z_DriveTeleop = new DriveTeleop(s_DriverSubsystem); 
+  
+  private final static XboxController io_drivercontroller = new XboxController(OperatorConstants.kDriverControllerPort);
+  private final static XboxController io_opercontroller = new XboxController(OperatorConstants.kOperatorControllerPort);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    s_DriverSubsystem.setDefaultCommand(z_DriveTeleop);
   }
 
   /**
@@ -41,15 +49,38 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
+    
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
+  public static double deadZoneCheck(double rawControllerInput){
+    if (rawControllerInput > OperatorConstants.kControllerDeadZone || rawControllerInput < -OperatorConstants.kControllerDeadZone){
+      return rawControllerInput;
+    }
+    else{
+      return 0;
+    }
+  }
+
+  public static double getDriverLeftSpeed(){
+    return deadZoneCheck(io_drivercontroller.getLeftY());
+  }
+  public static double getDriverRightSpeed() {
+    return deadZoneCheck(io_drivercontroller.getRightY());
+  }
+  public static double getDriverLeftSpeedX(){
+    return deadZoneCheck(io_drivercontroller.getLeftX());
+  }
+  public static double getDriverRightSpeedX(){
+    return deadZoneCheck(io_drivercontroller.getRightX());
+  }
+  public static double getOperRightSpeedY(){
+    return deadZoneCheck(io_opercontroller.getRightY());
+  }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
