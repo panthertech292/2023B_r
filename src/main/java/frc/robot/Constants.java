@@ -21,10 +21,14 @@ public final class Constants {
   }
 
   public static class DriveConstants {
-    public static int kBackLeftMotor = 13;
-    public static int kBackRightMotor = 3;
-    public static int kFrontLeftMotor = 33;
-    public static int kFrontRightMotor = 23; //placeholders woooooo-
+    public static int kBackLeftMotor = 11;
+    public static int kBackRightMotor = 9;
+    public static int kFrontLeftMotor = 1;
+    public static int kFrontRightMotor = 2;
 
+  }
+  public static class ArmConstants {
+    public static int kLowerArmMotor = 8;
+    public static int kUpperArmMotor = 7; 
   }
 }

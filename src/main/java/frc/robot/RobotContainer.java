@@ -5,14 +5,19 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.LowArmControl;
+import frc.robot.commands.UpArmControl;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -26,8 +31,14 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final DriveSubsystem s_DriverSubsystem = new DriveSubsystem();
+  private final ArmSubsystem s_ArmSubsystem = new ArmSubsystem();
 
   private final Command z_DriveTeleop = new DriveTeleop(s_DriverSubsystem); 
+  private final Command z_LowArmControl_In = new LowArmControl(s_ArmSubsystem, 0.35, 7, 0.20);
+  private final Command z_LowArmControl_Out = new LowArmControl(s_ArmSubsystem, 0.48, 7, 0.20);
+
+  private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.35, 7, 0.20);
+  private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.48, 7, 0.20);
   
   private final static XboxController io_drivercontroller = new XboxController(OperatorConstants.kDriverControllerPort);
   private final static XboxController io_opercontroller = new XboxController(OperatorConstants.kOperatorControllerPort);
@@ -55,6 +66,14 @@ public class RobotContainer {
     
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+    final JoystickButton d_aButton = new JoystickButton(io_drivercontroller, Button.kA.value);
+    d_aButton.whileTrue(z_LowArmControl_In);
+    final JoystickButton d_bButton = new JoystickButton(io_drivercontroller, Button.kB.value);
+    d_bButton.whileTrue(z_LowArmControl_Out);
+    final JoystickButton d_xButton = new JoystickButton(io_drivercontroller, Button.kX.value);
+    d_xButton.whileTrue(z_UpperArmControl_In);
+    final JoystickButton d_yButton = new JoystickButton(io_drivercontroller, Button.kY.value);
+    d_yButton.whileTrue(z_UpperArmControl_Out);
   }
   public static double deadZoneCheck(double rawControllerInput){
     if (rawControllerInput > OperatorConstants.kControllerDeadZone || rawControllerInput < -OperatorConstants.kControllerDeadZone){
