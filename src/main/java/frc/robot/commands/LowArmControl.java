@@ -47,7 +47,7 @@ public class LowArmControl extends CommandBase {
 
 
     ArmSubsystem.setLowerArmMotorSpeed(v_error);
-    System.out.println("ARM IS @: " + ArmSubsystem.getLowerArmEncoder());
+    //System.out.println("ARM IS @: " + ArmSubsystem.getLowerArmEncoder());
   }
 
   // Called once the command ends or is interrupted.

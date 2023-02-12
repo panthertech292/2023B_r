@@ -47,6 +47,7 @@ public class UpArmControl extends CommandBase {
 
 
     ArmSubsystem.setUpperArmMotorSpeed(v_error);
+    //ArmSubsystem.setUpperArmMotorSpeed(-0.15);
     //System.out.println("ARM IS @: " + ArmSubsystem.getUpperArmEncoder());
   }
 

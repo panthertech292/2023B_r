@@ -9,6 +9,7 @@ import frc.robot.commands.LowArmControl;
 import frc.robot.commands.UpArmControl;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveTeleop;
+import frc.robot.commands.DualArmControl;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -37,8 +38,12 @@ public class RobotContainer {
   private final Command z_LowArmControl_In = new LowArmControl(s_ArmSubsystem, 0.35, 7, 0.20);
   private final Command z_LowArmControl_Out = new LowArmControl(s_ArmSubsystem, 0.48, 7, 0.20);
 
-  private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.35, 7, 0.20);
-  private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.48, 7, 0.20);
+  private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.325, 9, 0.3);
+  private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.029, 9, 0.3);
+
+  //Extend and Retract Arms together
+  private final Command z_ArmExtend = new DualArmControl(s_ArmSubsystem, 0.48, 7, 0.2, 0.029, 9, 0.3);
+  private final Command z_ArmRetract = new DualArmControl(s_ArmSubsystem, 0.35, 7, 0.2, 0.325, 9, 0.3);
   
   private final static XboxController io_drivercontroller = new XboxController(OperatorConstants.kDriverControllerPort);
   private final static XboxController io_opercontroller = new XboxController(OperatorConstants.kOperatorControllerPort);
@@ -74,6 +79,10 @@ public class RobotContainer {
     d_xButton.whileTrue(z_UpperArmControl_In);
     final JoystickButton d_yButton = new JoystickButton(io_drivercontroller, Button.kY.value);
     d_yButton.whileTrue(z_UpperArmControl_Out);
+    final JoystickButton d_startButton = new JoystickButton(io_drivercontroller, Button.kStart.value);
+    d_startButton.whileTrue(z_ArmExtend);
+    final JoystickButton d_backButton = new JoystickButton(io_drivercontroller, Button.kBack.value);
+    d_backButton.whileTrue(z_ArmRetract);
   }
   public static double deadZoneCheck(double rawControllerInput){
     if (rawControllerInput > OperatorConstants.kControllerDeadZone || rawControllerInput < -OperatorConstants.kControllerDeadZone){
