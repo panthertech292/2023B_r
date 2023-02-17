@@ -35,10 +35,10 @@ public class RobotContainer {
   private final ArmSubsystem s_ArmSubsystem = new ArmSubsystem();
 
   private final Command z_DriveTeleop = new DriveTeleop(s_DriverSubsystem); 
-  private final Command z_LowArmControl_In = new LowArmControl(s_ArmSubsystem, 0.35, 7, 0.20);
-  private final Command z_LowArmControl_Out = new LowArmControl(s_ArmSubsystem, 0.48, 7, 0.20);
+  private final Command z_LowArmControl_In = new LowArmControl(s_ArmSubsystem, 0.343, 7, 0.20);
+  private final Command z_LowArmControl_Out = new LowArmControl(s_ArmSubsystem, 0.50, 7, 0.20);
 
-  private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.325, 9, 0.3);
+  private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.525, 9, 0.3);
   private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.029, 9, 0.3);
 
   //Extend and Retract Arms together
