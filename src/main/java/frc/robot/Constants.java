@@ -30,5 +30,12 @@ public final class Constants {
   public static class ArmConstants {
     public static int kLowerArmMotor = 8;
     public static int kUpperArmMotor = 7; 
+
+    public static int kLowerArmEncoderChannel = 0;
+    public static int kUpperArmEncoderChannel = 1;
+  }
+  public static class PickupConstants {
+    public static int kPickupClawSolenoidRetractChannel = 0;
+    public static int kPickupClawSolenoidExtendChannel = 1;
   }
 }

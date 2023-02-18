@@ -5,15 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.LowArmControl;
-import frc.robot.commands.UpArmControl;
-import frc.robot.commands.Autos;
-import frc.robot.commands.DriveTeleop;
-import frc.robot.commands.DualArmControl;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.PickupSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,25 +23,34 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private final static XboxController io_drivercontroller = new XboxController(OperatorConstants.kDriverControllerPort);
+  private final static XboxController io_opercontroller = new XboxController(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
   private final DriveSubsystem s_DriverSubsystem = new DriveSubsystem();
   private final ArmSubsystem s_ArmSubsystem = new ArmSubsystem();
+  private final PickupSubsystem s_PickupSubsystem = new PickupSubsystem();
 
-  private final Command z_DriveTeleop = new DriveTeleop(s_DriverSubsystem); 
+  //Drive Commands
+  private final Command z_DriveTeleop = new DriveTeleop(s_DriverSubsystem);
+
+  //Arm Commands
   private final Command z_LowArmControl_In = new LowArmControl(s_ArmSubsystem, 0.343, 7, 0.20);
   private final Command z_LowArmControl_Out = new LowArmControl(s_ArmSubsystem, 0.50, 7, 0.20);
-
   private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.525, 9, 0.3);
   private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.029, 9, 0.3);
+  private final Command z_DualArmManual = new DualArmManual(s_ArmSubsystem);
 
   //Extend and Retract Arms together
   private final Command z_ArmExtend = new DualArmControl(s_ArmSubsystem, 0.48, 7, 0.2, 0.029, 9, 0.3);
   private final Command z_ArmRetract = new DualArmControl(s_ArmSubsystem, 0.35, 7, 0.2, 0.325, 9, 0.3);
-  
-  private final static XboxController io_drivercontroller = new XboxController(OperatorConstants.kDriverControllerPort);
-  private final static XboxController io_opercontroller = new XboxController(OperatorConstants.kOperatorControllerPort);
+
+  private final Command z_ArmPickupSpot = new DualArmControl(s_ArmSubsystem, 0.432, 7, 0.2, 0.216, 9, 0.3);
+  private final Command z_ArmScoreSpot = new DualArmControl(s_ArmSubsystem, 0.455, 7, 0.2, 0.133, 9, 0.3);
+  private final Command z_ArmStowed = new DualArmControl(s_ArmSubsystem, 0.455, 7, 0.2, 0.133, 9, 0.3);
+
+  //Pickup Commands
+  private final Command z_ClawOpen = new ClawOpen(s_PickupSubsystem);
+  private final Command z_ClawClose = new ClawClose(s_PickupSubsystem);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -54,6 +58,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     s_DriverSubsystem.setDefaultCommand(z_DriveTeleop);
+    s_ArmSubsystem.setDefaultCommand(z_DualArmManual);
   }
 
   /**
@@ -72,9 +77,11 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     final JoystickButton d_aButton = new JoystickButton(io_drivercontroller, Button.kA.value);
-    d_aButton.whileTrue(z_LowArmControl_In);
+    //d_aButton.whileTrue(z_LowArmControl_In);
+    d_aButton.whileTrue(z_ArmPickupSpot);
     final JoystickButton d_bButton = new JoystickButton(io_drivercontroller, Button.kB.value);
-    d_bButton.whileTrue(z_LowArmControl_Out);
+    //d_bButton.whileTrue(z_LowArmControl_Out);
+    d_bButton.whileTrue(z_ArmScoreSpot);
     final JoystickButton d_xButton = new JoystickButton(io_drivercontroller, Button.kX.value);
     d_xButton.whileTrue(z_UpperArmControl_In);
     final JoystickButton d_yButton = new JoystickButton(io_drivercontroller, Button.kY.value);
@@ -83,6 +90,11 @@ public class RobotContainer {
     d_startButton.whileTrue(z_ArmExtend);
     final JoystickButton d_backButton = new JoystickButton(io_drivercontroller, Button.kBack.value);
     d_backButton.whileTrue(z_ArmRetract);
+    final JoystickButton d_rightBumper = new JoystickButton(io_drivercontroller, Button.kRightBumper.value);
+    d_rightBumper.onTrue(z_ClawOpen);
+    final JoystickButton d_leftBumper = new JoystickButton(io_drivercontroller, Button.kLeftBumper.value);
+    d_leftBumper.onTrue(z_ClawClose);
+
   }
   public static double deadZoneCheck(double rawControllerInput){
     if (rawControllerInput > OperatorConstants.kControllerDeadZone || rawControllerInput < -OperatorConstants.kControllerDeadZone){
@@ -105,8 +117,11 @@ public class RobotContainer {
   public static double getDriverRightSpeedX(){
     return deadZoneCheck(io_drivercontroller.getRightX());
   }
-  public static double getOperRightSpeedY(){
+  public static double getOperRightSpeed(){
     return deadZoneCheck(io_opercontroller.getRightY());
+  }
+  public static double getOperLeftSpeed(){
+    return deadZoneCheck(io_opercontroller.getLeftY());
   }
 
 
@@ -117,6 +132,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    //return Autos.exampleAuto(m_exampleSubsystem);
+    return null;
   }
 }

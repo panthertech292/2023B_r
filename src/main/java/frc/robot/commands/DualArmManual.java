@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class DriveTeleop extends CommandBase {
-  private final DriveSubsystem DriveSubsystem;
-  /** Creates a new DriveTeleop. */
-  public DriveTeleop(DriveSubsystem s_DriveSubsystem) {
-    DriveSubsystem = s_DriveSubsystem;
+public class DualArmManual extends CommandBase {
+  private final ArmSubsystem ArmSubsystem;
+  /** Creates a new LowArmManual. */
+  public DualArmManual(ArmSubsystem s_ArmSubsystem) {
+    ArmSubsystem = s_ArmSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_DriveSubsystem);
+    addRequirements(s_ArmSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +24,15 @@ public class DriveTeleop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    DriveSubsystem.differentialArcadeDrive(RobotContainer.getDriverRightSpeedX(), -RobotContainer.getDriverLeftSpeed());
+    ArmSubsystem.setLowerArmMotorSpeed(RobotContainer.getOperLeftSpeed());
+    ArmSubsystem.setUpperArmMotorSpeed(RobotContainer.getOperRightSpeed());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriveSubsystem.differentialArcadeDrive(0, 0);
+    ArmSubsystem.setLowerArmMotorSpeed(0);
+    ArmSubsystem.setUpperArmMotorSpeed(0);
   }
 
   // Returns true when the command should end.

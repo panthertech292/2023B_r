@@ -32,25 +32,28 @@ public class ArmSubsystem extends SubsystemBase {
     LowerArmMotor.restoreFactoryDefaults();
     LowerArmMotor.setIdleMode(IdleMode.kBrake);
     LowerArmMotor.burnFlash();
-    LowerArmEncoder = new DutyCycleEncoder(0);
+    LowerArmEncoder = new DutyCycleEncoder(ArmConstants.kLowerArmEncoderChannel);
     LowerArmMotorEncoder = LowerArmMotor.getEncoder();
 
     UpperArmMotor = new CANSparkMax(ArmConstants.kUpperArmMotor, MotorType.kBrushless);
     UpperArmMotor.restoreFactoryDefaults();
     UpperArmMotor.setIdleMode(IdleMode.kBrake);
     UpperArmMotor.burnFlash();
-    UpperArmEncoder = new DutyCycleEncoder(1); //PLACE HOLDER
+    UpperArmEncoder = new DutyCycleEncoder(ArmConstants.kUpperArmEncoderChannel); //PLACE HOLDER
     UpperArmMotorEncoder = UpperArmMotor.getEncoder();
   }
   public void setLowerArmMotorSpeed(double lowerarmspeed){
     v_lowerArmSpeed = lowerarmspeed;
     //System.out.println("IN HERE: " + v_lowerArmSpeed + " " + "RPM: " + LowerArmMotorEncoder.getVelocity());
     LowerArmMotor.set(v_lowerArmSpeed);
+    //System.out.println("LOW: " + LowerArmEncoder.getAbsolutePosition());
   }
   public void setUpperArmMotorSpeed(double upperarmspped){
     v_upperArmSpeed = upperarmspped;
     //System.out.println("IN HERE: " + v_upperArmSpeed + " " + "RPM: " + UpperArmMotorEncoder.getVelocity());
     UpperArmMotor.set(v_upperArmSpeed);
+    
+    //System.out.println("UP: " + UpperArmEncoder.getAbsolutePosition());
   }
   public double getLowerArmEncoder(){
     return LowerArmEncoder.getAbsolutePosition();
@@ -62,7 +65,8 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //System.out.println(UpperArmEncoder.getAbsolutePosition());
+    //System.out.println("LOW: " + LowerArmEncoder.getAbsolutePosition());
+    //System.out.println("UP: " + UpperArmEncoder.getAbsolutePosition());
     
   }
 }
