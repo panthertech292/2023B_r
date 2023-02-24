@@ -36,15 +36,16 @@ public class RobotContainer {
   //Arm Commands
   //Both Arms
   private final Command z_DualArmManual = new DualArmManual(s_ArmSubsystem);
-  private final Command z_DualArmPickupSpot = new DualArmControl(s_ArmSubsystem, false,0.311,9,0.3);
-  private final Command z_DualArmScoreSpot = new DualArmControl(s_ArmSubsystem, true, 0.071, 9, 0.3);
-  private final Command z_DualArmStowedSpot = new DualArmControl(s_ArmSubsystem, false, 0.44, 9, 0.3);
+  private final Command z_DualArmPickupSpot = new DualArmControl(s_ArmSubsystem, false,0.33,5,0.15);
+  private final Command z_DualArmScoreSpot = new DualArmControl(s_ArmSubsystem, true, 0.13, 5, 0.15);
+  private final Command z_DualArmStowedSpot = new DualArmControl(s_ArmSubsystem, false, 0.49, 5, 0.15);
+  private final Command z_DualArmFloorSpot = new DualArmControl(s_ArmSubsystem, true, 0.42, 5, 0.15);
   //Low Arm
-  private final Command z_LowArmExtend = new LowArmExtend(s_ArmSubsystem);
-  private final Command z_LowArmRetract = new LowArmRetract(s_ArmSubsystem);
+  //private final Command z_LowArmExtend = new LowArmExtend(s_ArmSubsystem);
+  //private final Command z_LowArmRetract = new LowArmRetract(s_ArmSubsystem);
   //Up Arm
-  private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.525, 9, 0.3);
-  private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.029, 9, 0.3);
+  //private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.525, 9, 0.3);
+  //private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.029, 9, 0.3);
   
 
 
@@ -76,6 +77,7 @@ public class RobotContainer {
     
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+    //Driver Buttons
     final JoystickButton d_aButton = new JoystickButton(io_drivercontroller, Button.kA.value);
     d_aButton.whileTrue(z_DualArmPickupSpot);
     final JoystickButton d_bButton = new JoystickButton(io_drivercontroller, Button.kB.value);
@@ -83,15 +85,29 @@ public class RobotContainer {
     final JoystickButton d_xButton = new JoystickButton(io_drivercontroller, Button.kX.value);
     d_xButton.whileTrue(z_DualArmStowedSpot);
     final JoystickButton d_yButton = new JoystickButton(io_drivercontroller, Button.kY.value);
-    //d_yButton.whileTrue(z_UpperArmControl_Out);
+    d_yButton.whileTrue(z_DualArmFloorSpot);
     final JoystickButton d_startButton = new JoystickButton(io_drivercontroller, Button.kStart.value);
     //d_startButton.whileTrue(z_ArmExtend);
     final JoystickButton d_backButton = new JoystickButton(io_drivercontroller, Button.kBack.value);
     //d_backButton.whileTrue(z_ArmRetract);
     final JoystickButton d_rightBumper = new JoystickButton(io_drivercontroller, Button.kRightBumper.value);
-    d_rightBumper.onTrue(z_ClawOpen);
+    d_rightBumper.onTrue(z_ClawClose);
     final JoystickButton d_leftBumper = new JoystickButton(io_drivercontroller, Button.kLeftBumper.value);
-    d_leftBumper.onTrue(z_ClawClose);
+    d_leftBumper.onTrue(z_ClawOpen);
+
+    //Operator Buttons
+    final JoystickButton o_rightBumper = new JoystickButton(io_opercontroller, Button.kRightBumper.value);
+    o_rightBumper.onTrue(z_ClawClose);
+    final JoystickButton o_leftBumper = new JoystickButton(io_opercontroller, Button.kLeftBumper.value);
+    o_leftBumper.onTrue(z_ClawOpen);
+    final JoystickButton o_aButton = new JoystickButton(io_opercontroller, Button.kA.value);
+    o_aButton.whileTrue(z_DualArmPickupSpot); 
+    final JoystickButton o_bButton = new JoystickButton(io_opercontroller, Button.kB.value);
+    o_bButton.whileTrue(z_DualArmScoreSpot);
+    final JoystickButton o_xButton = new JoystickButton(io_opercontroller, Button.kX.value);
+    o_xButton.whileTrue(z_DualArmStowedSpot);
+    final JoystickButton o_yButton = new JoystickButton(io_opercontroller, Button.kY.value);
+    o_yButton.whileTrue(z_DualArmFloorSpot);
 
   }
   public static double deadZoneCheck(double rawControllerInput){
