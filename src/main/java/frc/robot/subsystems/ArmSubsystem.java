@@ -53,7 +53,9 @@ public class ArmSubsystem extends SubsystemBase {
     //System.out.println("IN HERE: " + v_upperArmSpeed + " " + "RPM: " + UpperArmMotorEncoder.getVelocity());
     UpperArmMotor.set(-v_upperArmSpeed);
     
-    System.out.println("UP: " + UpperArmEncoder.getAbsolutePosition());
+    //System.out.println("UP: " + UpperArmEncoder.getAbsolutePosition());
+    //System.out.println("POWER: " + UpperArmMotor.get());
+    //System.out.println("RPM: " + UpperArmMotorEncoder.getVelocity());
   }
   public double getUpperArmEncoder(){
     return UpperArmEncoder.getAbsolutePosition();

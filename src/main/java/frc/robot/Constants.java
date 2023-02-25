@@ -25,6 +25,7 @@ public final class Constants {
     public static int kBackRightMotor = 9;
     public static int kFrontLeftMotor = 1;
     public static int kFrontRightMotor = 2;
+    public static int kPigeon2 = 6;
 
   }
   public static class ArmConstants {

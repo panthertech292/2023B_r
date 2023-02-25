@@ -32,14 +32,15 @@ public class RobotContainer {
 
   //Drive Commands
   private final Command z_DriveTeleop = new DriveTeleop(s_DriverSubsystem);
+  private final Command z_DriveBalance = new DriveBalance(s_DriverSubsystem, 0.015, 0.25);
 
   //Arm Commands
   //Both Arms
   private final Command z_DualArmManual = new DualArmManual(s_ArmSubsystem);
-  private final Command z_DualArmPickupSpot = new DualArmControl(s_ArmSubsystem, false,0.33,5,0.15);
-  private final Command z_DualArmScoreSpot = new DualArmControl(s_ArmSubsystem, true, 0.13, 5, 0.15);
-  private final Command z_DualArmStowedSpot = new DualArmControl(s_ArmSubsystem, false, 0.49, 5, 0.15);
-  private final Command z_DualArmFloorSpot = new DualArmControl(s_ArmSubsystem, true, 0.42, 5, 0.15);
+  private final Command z_DualArmPickupSpot = new DualArmControl(s_ArmSubsystem, false,0.33,9,0.15);
+  private final Command z_DualArmScoreSpot = new DualArmControl(s_ArmSubsystem, true, 0.13, 9, 0.15);
+  private final Command z_DualArmStowedSpot = new DualArmControl(s_ArmSubsystem, false, 0.49, 9, 0.15);
+  private final Command z_DualArmFloorSpot = new DualArmControl(s_ArmSubsystem, true, 0.42, 9, 0.15);
   //Low Arm
   //private final Command z_LowArmExtend = new LowArmExtend(s_ArmSubsystem);
   //private final Command z_LowArmRetract = new LowArmRetract(s_ArmSubsystem);
@@ -87,7 +88,7 @@ public class RobotContainer {
     final JoystickButton d_yButton = new JoystickButton(io_drivercontroller, Button.kY.value);
     d_yButton.whileTrue(z_DualArmFloorSpot);
     final JoystickButton d_startButton = new JoystickButton(io_drivercontroller, Button.kStart.value);
-    //d_startButton.whileTrue(z_ArmExtend);
+    d_startButton.whileTrue(z_DriveBalance);
     final JoystickButton d_backButton = new JoystickButton(io_drivercontroller, Button.kBack.value);
     //d_backButton.whileTrue(z_ArmRetract);
     final JoystickButton d_rightBumper = new JoystickButton(io_drivercontroller, Button.kRightBumper.value);

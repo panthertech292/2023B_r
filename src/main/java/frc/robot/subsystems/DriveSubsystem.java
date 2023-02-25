@@ -5,8 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +19,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final WPI_TalonSRX FrontRightMotor;
   private final WPI_TalonSRX BackLeftMotor;
   private final WPI_TalonSRX BackRightMotor;
+
+  private WPI_Pigeon2 Pigeon2;
 
   private final MotorControllerGroup LeftSide;
   private final MotorControllerGroup RightSide;
@@ -35,10 +37,17 @@ public class DriveSubsystem extends SubsystemBase {
     FrontRightMotor = new WPI_TalonSRX(DriveConstants.kFrontRightMotor);
     BackLeftMotor = new WPI_TalonSRX(DriveConstants.kBackLeftMotor);
     BackRightMotor = new WPI_TalonSRX(DriveConstants.kBackRightMotor);//n u m b e r
+
+    Pigeon2 = new WPI_Pigeon2(DriveConstants.kPigeon2);
+
     LeftSide = new MotorControllerGroup(FrontLeftMotor, BackLeftMotor);
     RightSide = new MotorControllerGroup(FrontRightMotor, BackRightMotor);
     DifDrive = new DifferentialDrive(LeftSide,RightSide);
 
+    //Pigeon2.reset();
+  }
+  public double getPitch(){
+    return Pigeon2.getRoll();
   }
 
   public void differentialArcadeDrive(double forBackSpeed, double rotateSpeed){
@@ -46,9 +55,19 @@ public class DriveSubsystem extends SubsystemBase {
     v_rightYSpeed = -rotateSpeed;
     DifDrive.arcadeDrive(v_leftXSpeed, v_rightYSpeed);
   }
+  public void differentialTankDrive(double leftSpeed, double rightSpeed){
+    v_leftSpeed = leftSpeed;
+    v_rightSpeed = -rightSpeed;
+
+    DifDrive.tankDrive(v_leftSpeed, v_rightSpeed, false);
+    //System.out.println(FrontLeftMotor.get());
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //System.out.println("YAW: " + Pigeon2.getYaw());
+    //System.out.println("ROLL: " + Pigeon2.getRoll());
+    //System.out.println("PITCH: " + Pigeon2.getPitch());
   }
 }
