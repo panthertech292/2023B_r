@@ -9,6 +9,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PickupSubsystem;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,6 +59,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    CameraServer.startAutomaticCapture().setFPS(20);
     configureBindings();
     s_DriverSubsystem.setDefaultCommand(z_DriveTeleop);
     s_ArmSubsystem.setDefaultCommand(z_DualArmManual);
@@ -118,20 +120,32 @@ public class RobotContainer {
     else{
       return 0;
     }
+    
+  }
+
+  public static double deadZoneCheck2(double rawControllerInput){
+    if (rawControllerInput > OperatorConstants.kControllerDeadZone2 || rawControllerInput < -OperatorConstants.kControllerDeadZone2){
+      return rawControllerInput;
+    }
+    else{
+      return 0;
+    }
+    
   }
 
   public static double getDriverLeftSpeed(){
-    return deadZoneCheck(io_drivercontroller.getLeftY());
+    return deadZoneCheck2(io_drivercontroller.getLeftY());
   }
   public static double getDriverRightSpeed() {
     return deadZoneCheck(io_drivercontroller.getRightY());
   }
   public static double getDriverLeftSpeedX(){
-    return deadZoneCheck(io_drivercontroller.getLeftX());
+    return deadZoneCheck2(io_drivercontroller.getLeftX());
   }
   public static double getDriverRightSpeedX(){
     return deadZoneCheck(io_drivercontroller.getRightX());
   }
+
   public static double getOperRightSpeed(){
     return deadZoneCheck(io_opercontroller.getRightY());
   }

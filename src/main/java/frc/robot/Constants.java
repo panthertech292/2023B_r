@@ -18,6 +18,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
     public static final double kControllerDeadZone = 0.15;
+    public static final double kControllerDeadZone2 = 0.05;
   }
 
   public static class DriveConstants {
