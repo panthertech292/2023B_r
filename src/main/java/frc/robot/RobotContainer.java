@@ -116,18 +116,8 @@ public class RobotContainer {
     o_yButton.whileTrue(z_DualArmFloorSpot);
 
   }
-  public static double deadZoneCheck(double rawControllerInput){
-    if (rawControllerInput > OperatorConstants.kControllerDeadZone || rawControllerInput < -OperatorConstants.kControllerDeadZone){
-      return rawControllerInput;
-    }
-    else{
-      return 0;
-    }
-    
-  }
-
-  public static double deadZoneCheck2(double rawControllerInput){
-    if (rawControllerInput > OperatorConstants.kControllerDeadZone2 || rawControllerInput < -OperatorConstants.kControllerDeadZone2){
+  public static double deadZoneCheck(double rawControllerInput, double deadBand){
+    if (rawControllerInput > deadBand || rawControllerInput < -deadBand){
       return rawControllerInput;
     }
     else{
@@ -137,23 +127,23 @@ public class RobotContainer {
   }
 
   public static double getDriverLeftSpeed(){
-    return deadZoneCheck2(io_drivercontroller.getLeftY());
+    return deadZoneCheck(io_drivercontroller.getLeftY(), OperatorConstants.kControllerDeadZone2);
   }
   public static double getDriverRightSpeed() {
-    return deadZoneCheck(io_drivercontroller.getRightY());
+    return deadZoneCheck(io_drivercontroller.getRightY(), OperatorConstants.kControllerDeadZone);
   }
   public static double getDriverLeftSpeedX(){
-    return deadZoneCheck2(io_drivercontroller.getLeftX());
+    return deadZoneCheck(io_drivercontroller.getLeftX(), OperatorConstants.kControllerDeadZone2);
   }
   public static double getDriverRightSpeedX(){
-    return deadZoneCheck(io_drivercontroller.getRightX());
+    return deadZoneCheck(io_drivercontroller.getRightX(), OperatorConstants.kControllerDeadZone);
   }
 
   public static double getOperRightSpeed(){
-    return deadZoneCheck(io_opercontroller.getRightY());
+    return deadZoneCheck(io_opercontroller.getRightY(), OperatorConstants.kControllerDeadZone);
   }
   public static double getOperLeftSpeed(){
-    return deadZoneCheck(io_opercontroller.getLeftY());
+    return deadZoneCheck(io_opercontroller.getLeftY(), OperatorConstants.kControllerDeadZone);
   }
 
 

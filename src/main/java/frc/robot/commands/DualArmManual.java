@@ -24,7 +24,7 @@ public class DualArmManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ArmSubsystem.setUpperArmMotorSpeed(RobotContainer.deadZoneCheck(RobotContainer.getOperRightSpeed()));
+    ArmSubsystem.setUpperArmMotorSpeed(RobotContainer.getOperRightSpeed());
     
     //Extend or Retract the low arm based on joystick position
     if (RobotContainer.getOperLeftSpeed() > .15){
