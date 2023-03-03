@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
+import frc.robot.commands.Auto.BasicAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PickupSubsystem;
@@ -48,7 +49,9 @@ public class RobotContainer {
   //Up Arm
   //private final Command z_UpperArmControl_In = new UpArmControl(s_ArmSubsystem, 0.525, 9, 0.3);
   //private final Command z_UpperArmControl_Out = new UpArmControl(s_ArmSubsystem, 0.029, 9, 0.3);
-  
+
+  //Auto Commands
+  private final Command z_BasicAuto = new BasicAuto(s_DriverSubsystem, s_ArmSubsystem, s_PickupSubsystem);
 
 
   //Pickup Commands
@@ -162,6 +165,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(m_exampleSubsystem);
-    return null;
+    return z_BasicAuto;
   }
 }
